@@ -149,3 +149,17 @@ unfixable = []
 
 [tool.ruff.extend-per-file-ignores]
 "tests/**/*.py" = ["D"]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.pypi-dependencies]
+minitorch = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+python = "==3.12"
+pip = ">=24.3.1,<25"
+nodejs = ">=22.11.0,<23"
