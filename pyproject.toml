@@ -72,6 +72,7 @@ exclude = [
     "**/mt_diagrams/*",
     "**/minitorch/testing.py",
     "**/docs/**/*",
+    "code_test"
 ]
 
 ignore = [

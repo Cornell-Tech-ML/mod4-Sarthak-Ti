@@ -67,6 +67,9 @@ def test_max(t: Tensor) -> None:
     # here we have an output that is shape 3,4. we can simply provide a random tensor as the d output values to manually easily verify it
     d_out = minitorch.rand((3, 4)) + 1  # just to ensure no values are 0 for this test
     out.backward(d_out)
+    assert (
+        t.grad is not None
+    ), "Gradient is None. Ensure `backward` is called before accessing `t.grad`."
     # now manually verify the values in t.grad
     for i in range(3):
         for j in range(4):
