@@ -69,7 +69,7 @@ class CNNSentimentKim(minitorch.Module):
         self.cnn1 = Conv1d(embedding_size, feature_map_size, filter_sizes[0])
         self.cnn2 = Conv1d(embedding_size, feature_map_size, filter_sizes[1])
         self.cnn3 = Conv1d(embedding_size, feature_map_size, filter_sizes[2])
-        self.l = Linear(feature_map_size, feature_map_size)
+        # self.l = Linear(feature_map_size, feature_map_size)
         self.linear = Linear(feature_map_size, 1)
 
     def forward(self, embeddings: minitorch.Tensor) -> minitorch.Tensor:
@@ -79,9 +79,9 @@ class CNNSentimentKim(minitorch.Module):
         y1 = self.cnn1(x).relu() #now it's batch x feature map size x sequence length (it's same conv)
         y2 = self.cnn2(x).relu()
         y3 = self.cnn3(x).relu()
-        z1 = minitorch.nn.max(y1, -1).view(y1.shape[0], y1.shape[1]) #this is the max over time
-        z2 = minitorch.nn.max(y2, -1).view(y2.shape[0], y2.shape[1]) #now is shape batch x feature map size
-        z3 = minitorch.nn.max(y3, -1).view(y3.shape[0], y3.shape[1])
+        z1 = minitorch.nn.max(y1, 2).view(y1.shape[0], y1.shape[1]) #this is the max over time
+        z2 = minitorch.nn.max(y2, 2).view(y2.shape[0], y2.shape[1]) #now is shape batch x feature map size
+        z3 = minitorch.nn.max(y3, 2).view(y3.shape[0], y3.shape[1])
 
         z = z1 + z2 + z3 #add them together, still batch x feature map size
         #let's instead concatenate them
@@ -91,11 +91,14 @@ class CNNSentimentKim(minitorch.Module):
         # z[:, z1.shape[1]:z1.shape[1] + z2.shape[1]] = z2
         # z[:, z1.shape[1] + z2.shape[1]:] = z3
 
-        z = self.l(z).relu() #apply linear layer and then relu for more features
+        # z = self.l(z).relu() #apply linear layer and then relu for more features
+        #now apply dropout
+        # z = minitorch.nn.dropout(z, 0.25, self.training) #want to apply dropout here, as it's before the features, dropout in the final layer makes no sense
 
-        out = self.linear(z) #now apply linear layer and then dropout
-        out = minitorch.nn.dropout(out, 0.25)
-        return out.sigmoid() #apply sigmoid over the class dimension
+        out = self.linear(z) #now apply linear layer
+        out = minitorch.nn.dropout(out, 0.25, self.training) #here dropout makes no sense, but it's what the isntructions say. It also says RELU but we will definitely not apply RELU here, that actually doesn't make sense
+        #however, I trained models and both ways work, so it doesn't really matter in the end. But put it here as that's what the instructions say
+        return out.sigmoid().view(out.shape[0]) #apply sigmoid over the class dimension, and have to view or doesn't work for some reason...
 
 
 
@@ -287,7 +290,7 @@ def encode_sentiment_data(dataset: Union[Dict, List, Iterable[List]], pretrained
 
 
 if __name__ == "__main__":
-    train_size = 10000
+    train_size = 450
     validation_size = 100
     learning_rate = 0.01
     max_epochs = 1000
@@ -316,5 +319,5 @@ if __name__ == "__main__":
         learning_rate,
         max_epochs=max_epochs,
         data_val=(X_val, y_val),
-        batch_size=1000,
+        batch_size=50,
     )

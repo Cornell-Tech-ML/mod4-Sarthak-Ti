@@ -338,7 +338,7 @@ packages:
   name: minitorch
   version: '0.5'
   path: .
-  sha256: c29798897f110c89707c7251aaff0e2ee5edb52d3c685dc42e0bdf7928478ba6
+  sha256: 94dc35c0c7de03dc41a19fc897acef987c935c4a4607d45d371fe705ed17165e
   editable: true
 - kind: conda
   name: ncurses
