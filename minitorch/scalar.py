@@ -112,21 +112,54 @@ class Scalar:
         return self.history is not None and self.history.last_fn is None
 
     def is_constant(self) -> bool:
+        """Checks to see if it's a constant or a variable by seeing if it has a history
+        Note, that even if you input a constant in, it will have a history, so not too useful
+        """
         return self.history is None
 
     @property
     def parents(self) -> Iterable[Variable]:
-        """Get the variables used to create this one."""
+        """Gets the parents of the current variable, which are the inputs to the last function
+        It simply makes sure there is a history then gives the inputs, one coudl also loop over this
+        """
         assert self.history is not None
         return self.history.inputs
 
     def chain_rule(self, d_output: Any) -> Iterable[Tuple[Variable, Any]]:
+        """Applies the chain rule to compute gradients for the inputs of this Scalar.
+        This is how backpropogation is done and it calls the last function in the history.
+        This allows us to compute the new backward of the next function in the chain.
+        Essentially only gives it the gradient of the ahead functions, which works out mathematically.
+
+        Args:
+        ----
+            d_output (Any): The gradient flowing back from the next layer (unrelated to this Scalar).
+
+        Returns:
+        -------
+            Iterable[Tuple[Variable, Any]]: An iterable of tuples, each containing:
+                - A Variable (input to the operation that produced this Scalar)
+                - The gradient with respect to that variable
+
+        Note:
+        ----
+            This function filters out any constants (indicated by not being a Scalar),
+            effectively handling constants in the computation graph.
+
+        """
         h = self.history
         assert h is not None
         assert h.last_fn is not None
         assert h.ctx is not None
 
-        raise NotImplementedError("Need to include this file from past assignment.")
+        # Call the backward function of the last function in the history
+        fct_backward = h.last_fn._backward(h.ctx, d_output)
+
+        # Filter out non-Scalar inputs (constants)
+        scalars = [x for x in h.inputs if not x.is_constant()]
+
+        # Return the parents of the current variable and the derivatives
+        return zip(scalars, fct_backward)
 
     def backward(self, d_output: Optional[float] = None) -> None:
         """Calls autodiff to fill in the derivatives for the history of this object.
@@ -141,17 +174,55 @@ class Scalar:
             d_output = 1.0
         backpropagate(self, d_output)
 
-    raise NotImplementedError("Need to include this file from past assignment.")
+    # TODO: Implement for Task 1.2.
+    # raise NotImplementedError("Need to implement for Task 1.2")
+    def __lt__(self, other: ScalarLike) -> Scalar:
+        return LT.apply(self, other)
+
+    def __gt__(self, other: ScalarLike) -> Scalar:
+        return LT.apply(other, self)
+
+    def __sub__(self, other: ScalarLike) -> Scalar:
+        return Add.apply(self, Neg.apply(other))
+
+    def __neg__(self) -> Scalar:
+        return Neg.apply(self)
+
+    def __add__(self, other: ScalarLike) -> Scalar:
+        return Add.apply(self, other)
+
+    def __eq__(self, other: ScalarLike) -> Scalar:
+        return EQ.apply(self, other)
+
+    def log(self) -> Scalar:
+        """Overload the log function for Scalar."""
+        return Log.apply(self)
+
+    def exp(self) -> Scalar:
+        """Overload the exp function for Scalar."""
+        return Exp.apply(self)
+
+    def sigmoid(self) -> Scalar:
+        """Overload the sigmoid function for Scalar."""
+        return Sigmoid.apply(self)
+
+    def relu(self) -> Scalar:
+        """Overload the ReLU function for Scalar."""
+        return ReLU.apply(self)
 
 
 def derivative_check(f: Any, *scalars: Scalar) -> None:
     """Checks that autodiff works on a python function.
     Asserts False if derivative is incorrect.
 
-    Parameters
-    ----------
+    Args:
+    ----
         f : function from n-scalars to 1-scalar.
         *scalars  : n input scalar values.
+
+    Returns:
+    -------
+        None
 
     """
     out = f(*scalars)

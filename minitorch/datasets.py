@@ -5,6 +5,18 @@ from typing import List, Tuple
 
 
 def make_pts(N: int) -> List[Tuple[float, float]]:
+    """Generate N random points in the unit square
+    This means each of the N elements gets a tuple returned that contains two floats between 0 and 1.
+
+    Args:
+    ----
+        N: Number of points to generate
+
+    Returns:
+    -------
+        List of N points, each a tuple of two floats.
+
+    """
     X = []
     for i in range(N):
         x_1 = random.random()
@@ -21,6 +33,18 @@ class Graph:
 
 
 def simple(N: int) -> Graph:
+    """Simple dataset in 2 dimensions of N points
+    Returns labels of 1 if x_1 < 0.5 and 0 otherwise.
+
+    Args:
+    ----
+        N: Number of points to generate
+
+    Returns:
+    -------
+        Graph object with N points, both the 2d data and labels.
+
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -30,6 +54,19 @@ def simple(N: int) -> Graph:
 
 
 def diag(N: int) -> Graph:
+    """2 dimension dataset which finds a diagonal line separator
+    It returns labels of 1 if x_1 + x_2 < 0.5 and 0 otherwise.
+    The line y = 0.5 - x is the separator.
+
+    Args:
+    ----
+        N: Number of points to generate
+
+    Returns:
+    -------
+        Graph object with N points, both the 2d data and labels.
+
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -39,6 +76,18 @@ def diag(N: int) -> Graph:
 
 
 def split(N: int) -> Graph:
+    """2 dimension dataset which finds a split line separator
+    This means values of x1 below 0.2 or above 0.8 are 1, otherwise 0.
+
+    Args:
+    ----
+        N: Number of points to generate
+
+    Returns:
+    -------
+        Graph object with N points, both the 2d data and labels.
+
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -48,25 +97,63 @@ def split(N: int) -> Graph:
 
 
 def xor(N: int) -> Graph:
+    """2 dimension dataset which finds a xor line separator
+    This will look like a 2d plane split into 4 quadrants.
+    Opposite corners are 1, the other two are 0.
+
+    Args:
+    ----
+        N: Number of points to generate
+
+    Returns:
+    -------
+        Graph object with N points, both the 2d data and labels.
+
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
-        y1 = 1 if ((x_1 < 0.5 and x_2 > 0.5) or (x_1 > 0.5 and x_2 < 0.5)) else 0
+        y1 = 1 if x_1 < 0.5 and x_2 > 0.5 or x_1 > 0.5 and x_2 < 0.5 else 0
         y.append(y1)
     return Graph(N, X, y)
 
 
 def circle(N: int) -> Graph:
+    """2 dimension dataset which finds a circle separator
+    This will look like a circle in the middle of the 2d plane of 1
+
+    Args:
+    ----
+        N: Number of points to generate
+
+    Returns:
+    -------
+        Graph object with N points, both the 2d data and labels.
+
+    """
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
-        x1, x2 = (x_1 - 0.5, x_2 - 0.5)
+        x1, x2 = x_1 - 0.5, x_2 - 0.5
         y1 = 1 if x1 * x1 + x2 * x2 > 0.1 else 0
         y.append(y1)
     return Graph(N, X, y)
 
 
 def spiral(N: int) -> Graph:
+    """2 dimension dataset which finds a spiral separator
+    This will look like a spiral in the middle of the 2d plane of 1
+
+    Args:
+    ----
+        N: Number of points to generate
+
+    Returns:
+    -------
+        Graph object with N points, both the 2d data and labels.
+
+    """
+
     def x(t: float) -> float:
         return t * math.cos(t) / 20.0
 

@@ -129,4 +129,6 @@ dmypy.json
 .pyre/
 *.\#*
 data/
-pyodide
+pyodide# pixi environments
+.pixi
+*.egg-info
