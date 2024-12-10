@@ -1,20 +1,20 @@
-missing pre-trained embedding for 55 unknown words                                                                                                                                                                                                                                                                                                                                     
-Epoch 1, loss 31.454257461063783, train accuracy: 52.00%                                                                                                                                                                                                                                                                                                                               
-Validation accuracy: 48.00%                                                                                                                                                                                                                                                                                                                                                            
-Best Valid accuracy: 48.00%                                                                                                                                                                                                                                                                                                                                                            
-Epoch 2, loss 31.150710911420536, train accuracy: 55.11%                                                                                                                                                                                                                                                                                                                               
-Validation accuracy: 48.00%                                                                                                                                                                                                                                                                                                                                                            
-Best Valid accuracy: 48.00%                                                                                                                                                                                                                                                                                                                                                            
-Epoch 3, loss 31.009302510320513, train accuracy: 53.78%                                                                                                                                                                                                                                                                                                                               
-Validation accuracy: 48.00%                                                                                                                                                                                                                                                                                                                                                            
-Best Valid accuracy: 48.00%                                                                                                                                                                                                                                                                                                                                                            
-Epoch 4, loss 30.6979862160466, train accuracy: 57.78%                                                                                                                                                                                                                                                                                                                                 
-Best Valid accuracy: 53.00%                                                                                                                                                                                                                                                                                                                                                            
-Validation accuracy: 53.00%                                                                                                                                                                                                                                                                                                                                                            
-Epoch 5, loss 30.469473050135537, train accuracy: 58.22%                                                                                                                                                                                                                                                                                                                               
-Validation accuracy: 50.00%                                                                                                                                                                                                                                                                                                                                                            
-Best Valid accuracy: 53.00%                                                                                                                                                                                                                                                                                                                                                            
-Epoch 6, loss 30.12265531416932, train accuracy: 60.89%                                                                                                                                                                                                                                                                                                                                
+missing pre-trained embedding for 55 unknown words
+Epoch 1, loss 31.454257461063783, train accuracy: 52.00%
+Validation accuracy: 48.00%
+Best Valid accuracy: 48.00%
+Epoch 2, loss 31.150710911420536, train accuracy: 55.11%
+Validation accuracy: 48.00%
+Best Valid accuracy: 48.00%
+Epoch 3, loss 31.009302510320513, train accuracy: 53.78%
+Validation accuracy: 48.00%
+Best Valid accuracy: 48.00%
+Epoch 4, loss 30.6979862160466, train accuracy: 57.78%
+Best Valid accuracy: 53.00%
+Validation accuracy: 53.00%
+Epoch 5, loss 30.469473050135537, train accuracy: 58.22%
+Validation accuracy: 50.00%
+Best Valid accuracy: 53.00%
+Epoch 6, loss 30.12265531416932, train accuracy: 60.89%
 Validation accuracy: 53.00%
 Best Valid accuracy: 53.00%
 Epoch 7, loss 29.76559931126063, train accuracy: 62.00%
